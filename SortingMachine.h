@@ -13,9 +13,9 @@ template <typename T> class  SortingMachine {
 		
 	private:
 		static void swap(T* a, T* b);
-		void merge(T array[], const int left, const int middle, const int right);
+		static void merge(T array[], const int left, const int middle, const int right);
 		static void mergeSort(T array[], const int left, const int right);
-		static void quickSort(T array[], const int &low, const int &high);
+		static void quickSort(T array[], int low, const int &high);
 };
 
 template <typename T> 
@@ -55,31 +55,28 @@ void SortingMachine<T>::insertSort(T array[], const int size) {
 	}
 }
 
-/*template<typename T>
-void SortingMachine<T>::insertSort(T array[], std::function<T(T, T)> comparator) {
-}*/
-
-
 template <typename T> 
-void SortingMachine<T>::quickSort(T array[], const int &low, const int &high) {
+void SortingMachine<T>::quickSort(T array[], int low, const int &high) {
 	
-	if (low < high) {
+	while (low < high) {
 
-		int pivot = array[high]; 
-		int i = low - 1; 
+		int pivot = array[high];
+		int i = low - 1;
 
-		for (int j = low; j < high ; j++) {
+		for (int j = low; j < high; j++) {
 			if (array[j] < pivot) {
-				i++;  
+				i++;
 				swap(&array[i], &array[j]);
 			}
 		}
 		swap(&array[i + 1], &array[high]);
-		
+
 		pivot = i + 1;
 
 		quickSort(array, low, pivot - 1);
-		quickSort(array, pivot + 1, high);
+
+		low = pivot + 1;
+		//quickSort(array, pivot + 1, high);
 	}
 }
 
@@ -92,7 +89,7 @@ void SortingMachine<T>::quickSort(T array[], const int size) {
 
 template <typename T> 
 void SortingMachine<T>::mergeSort(T array[], const int size) {
-
+	mergeSort(array, 0, size - 1);
 }
 
 template <typename T> 
@@ -107,14 +104,15 @@ void SortingMachine<T>::mergeSort(T array[], const int left, const int right) {
 }
 
 template <typename T>
-void merge(T array[], const int l, const int m, const int r)
+void SortingMachine<T>::merge(T array[], const int l, const int m, const int r)
 {
 	int i, j, k;
 	int n1 = m - l + 1;
 	int n2 = r - m;
 
 	/* create temp arrays */
-	int L[n1], R[n2];
+	int* L = new int[n1];
+	int* R = new int[n2];
 
 	/* Copy data to temp arrays L[] and R[] */
 	for (i = 0; i < n1; i++)
@@ -153,6 +151,9 @@ void merge(T array[], const int l, const int m, const int r)
 		j++;
 		k++;
 	}
+
+	delete[] L;
+	delete[] R;
 }
 
 
